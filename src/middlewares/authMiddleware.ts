@@ -1,24 +1,27 @@
-import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
-export const authMiddleware = (roles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.split(' ')[1]
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-    if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' })
-    }
+// Middleware to check if user is authenticated
+export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-        role: string
-      }
-      if (!roles.includes(decoded.role)) {
-        return res.status(403).json({ message: 'Forbidden' })
-      }
-      next()
-    } catch (err) {
-      res.status(401).json({ message: 'Unauthorized' })
-    }
+  if (token == null) return res.sendStatus(401); // Unauthorized
+
+  jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+    if (err) return res.sendStatus(403); // Forbidden
+    (req as any).user = user;
+    next();
+  });
+};
+
+// Middleware to check if user has required role
+export const authorizeRoles = (roles: string[]) => (req: Request, res: Response, next: NextFunction) => {
+  if (roles.includes((req as any).user.role)) {
+    next();
+  } else {
+    res.sendStatus(403); // Forbidden
   }
-}
+};

@@ -4,7 +4,7 @@ import exampleRoutes from './example'
 
 const router = Router()
 
-router.use('/users', userRoutes)
+router.use('/user', userRoutes)
 router.use('/test',exampleRoutes)
 
 export default router
