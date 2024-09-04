@@ -10,6 +10,8 @@ const router = Router();
  * /user/register:
  *   post:
  *     summary: Register a new user
+ *     tags:
+ *       - User Management
  *     description: Register a new user with a username, password, and role
  *     requestBody:
  *       required: true
@@ -42,6 +44,8 @@ router.post('/register', [
  * /user/login:
  *   post:
  *     summary: Login a user
+ *     tags:
+ *       - User Management
  *     description: Login with username and password to receive a JWT token
  *     requestBody:
  *       required: true
@@ -70,6 +74,8 @@ router.post('/login', [
  * /user/users:
  *   get:
  *     summary: Get list of users
+ *     tags:
+ *       - User Management
  *     description: Retrieve a list of users with optional filters
  *     parameters:
  *       - name: search
