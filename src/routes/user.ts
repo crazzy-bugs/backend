@@ -7,7 +7,7 @@ const router = Router();
 
 /**
  * @swagger
- * /user/register:
+ * /register:
  *   post:
  *     summary: Register a new user
  *     tags:
@@ -41,7 +41,7 @@ router.post('/register', [
 
 /**
  * @swagger
- * /user/login:
+ * /login:
  *   post:
  *     summary: Login a user
  *     tags:
